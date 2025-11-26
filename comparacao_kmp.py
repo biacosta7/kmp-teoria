@@ -2,7 +2,11 @@ import subprocess
 import re
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
 
+plt.rcParams["figure.dpi"] = 120
+
+# teste.py
 print("\n==============================")
 print(">>> EXECUTANDO teste.py")
 print("==============================\n")
@@ -17,6 +21,7 @@ print("--------------------------------")
 print(saida_python)
 print("--------------------------------\n")
 
+# teste.c
 print("\n==============================")
 print(">>> COMPILANDO E EXECUTANDO teste.c")
 print("==============================\n")
@@ -38,17 +43,17 @@ def extrair_python(logs):
     dados = []
 
     padrao = re.compile(
-        r"Texto:\s*(\d+),\s*Padrão:\s*(\d+).*?Média:\s*([\d.]+)",
+        r"Texto:\s*(\d+),\s*Padrão:\s*(\d+).*?Média:\s*([\d.]+).*?Desvio padrão:\s*([\d.]+)",
         re.S
     )
 
-    for texto, padrao_tam, media in padrao.findall(logs):
+    for texto, padrao_tam, media, desvio in padrao.findall(logs):
         dados.append({
             "linguagem": "Python",
             "tamanho_texto": int(texto),
             "tamanho_padrao": int(padrao_tam),
             "tempo_medio": float(media),
-            "complexidade": "O(n + m)"
+            "desvio": float(desvio),
         })
 
     return dados
@@ -63,14 +68,15 @@ def extrair_c(logs):
         texto = re.search(r"TEXTO = (\d+)", bloco)
         padrao_tam = re.search(r"PADRAO = (\d+)", bloco)
         media = re.search(r"MEDIA: ([\d.]+)", bloco)
+        desvio = re.search(r"DESVIO PADRAO: ([\d.]+)", bloco)
 
-        if texto and padrao_tam and media:
+        if texto and padrao_tam and media and desvio:
             dados.append({
                 "linguagem": "C",
                 "tamanho_texto": int(texto.group(1)),
                 "tamanho_padrao": int(padrao_tam.group(1)),
                 "tempo_medio": float(media.group(1)),
-                "complexidade": "O(n + m)"
+                "desvio": float(desvio.group(1)),
             })
 
     return dados
@@ -82,56 +88,65 @@ dados_c = extrair_c(saida_c)
 df = pd.DataFrame(dados_python + dados_c)
 
 print("\n==============================")
-print(">>> DADOS EXTRAÍDOS (LOGS TRATADOS)")
+print(">>> DADOS EXTRAÍDOS (TRATADOS)")
 print("==============================\n")
 print(df)
 
-# criar tabela comparativa
-tabela = df.pivot(
-    index=["tamanho_texto", "tamanho_padrao"],
-    columns="linguagem",
-    values="tempo_medio"
-)
+# 6. Curva teórica (O(n+m))
+df_teorica = df.groupby("tamanho_texto")["tamanho_texto"].first()
+# normaliza para a escala dos tempos reais
+df_teorica_norm = df_teorica / df_teorica.max() * df["tempo_medio"].max()
 
-if "Python" in tabela.columns and "C" in tabela.columns:
-    tabela["C_vezes_mais_rapido"] = tabela["Python"] / tabela["C"]
-
-print("\n==============================")
-print(">>> TABELA COMPARATIVA FINAL")
-print("==============================\n")
-print(tabela)
-
-# grafico - tempo de execuçao
+# gráfico: Tempo real + desvio + curva teórica
 plt.figure()
+
 for linguagem in df["linguagem"].unique():
     dados = df[df["linguagem"] == linguagem]
-    plt.plot(
+    plt.errorbar(
         dados["tamanho_texto"],
         dados["tempo_medio"],
+        yerr=dados["desvio"],
         marker='o',
-        label=linguagem
+        capsize=5,
+        label=f"{linguagem} (prático)"
     )
 
-plt.xlabel("Tamanho do Texto")
-plt.ylabel("Tempo Médio (s)")
+plt.plot(
+    df_teorica.index,
+    df_teorica_norm,
+    linestyle="--",
+    label="Curva teórica O(n+m)"
+)
+
+plt.xscale("log")
+plt.yscale("log")
+
+plt.xlabel("Tamanho do Texto (log)")
+plt.ylabel("Tempo (s, log)")
 plt.title("Tempo de Execução - KMP (Python vs C)")
+plt.grid(True, which="both")
 plt.legend()
-plt.grid(True)
-plt.savefig("tempo_execucao_kmp.png")
+plt.savefig("curva_teorica_pratica.png")
 plt.show()
 
-# grafico - velocidade relativa
-if "C_vezes_mais_rapido" in tabela.columns:
-    plt.figure()
-    plt.plot(
-        tabela.index.get_level_values(0),
-        tabela["C_vezes_mais_rapido"],
-        marker='o'
-    )
+# speedup (quantas vezes C é mais rápido)
+df_speed = df.pivot(index="tamanho_texto", columns="linguagem", values="tempo_medio")
+df_speed["speedup"] = df_speed["Python"] / df_speed["C"]
 
-    plt.xlabel("Tamanho do Texto")
-    plt.ylabel("Python é X vezes mais lento que C")
-    plt.title("Velocidade Relativa - KMP")
-    plt.grid(True)
-    plt.savefig("velocidade_relativa_kmp.png")
-    plt.show()
+plt.figure()
+plt.plot(df_speed.index, df_speed["speedup"], marker='o')
+
+# curva sintética ~ linear para comparação de speedup
+synthetic = df_speed.index / df_speed.index.min()
+plt.plot(df_speed.index, synthetic, linestyle="--", label="Curva sintética (linear)")
+
+plt.xscale("log")
+plt.yscale("log")
+
+plt.xlabel("Tamanho do Texto (log)")
+plt.ylabel("Speedup (log)")
+plt.title("Tempo de Execução - KMP (Python vs C) | Curva prática x sintética")
+plt.grid(True, which="both")
+plt.legend()
+plt.savefig("curva_speedup.png")
+plt.show()

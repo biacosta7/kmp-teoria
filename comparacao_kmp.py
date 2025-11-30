@@ -1,10 +1,3 @@
-"""
-Versão corrigida da análise KMP
-- Curva teórica INDEPENDENTE (não ajustada aos dados)
-- Opção de mostrar todos os casos no gráfico teórico
-- Melhor visualização da aderência à teoria
-"""
-
 import subprocess
 import re
 import pandas as pd
@@ -26,7 +19,7 @@ plt.rcParams["font.size"] = 10
 plt.style.use('ggplot')
 
 print("="*70)
-print("ANÁLISE COMPLETA - ALGORITMO KMP (VERSÃO CORRIGIDA)")
+print("ANÁLISE COMPLETA - ALGORITMO KMP")
 print("Curva teórica independente + visualização aprimorada")
 print("="*70)
 
@@ -51,7 +44,7 @@ saida_c = subprocess.check_output(
 )
 
 # ============================================================
-# EXTRAÇÃO DE DADOS (mesmo código)
+# EXTRAÇÃO DE DADOS
 # ============================================================
 
 def extrair_dados(logs, linguagem):
@@ -102,7 +95,7 @@ x_labels = [bytes_to_label(n) for n in tamanhos_unicos]
 x_ticks = np.arange(len(x_labels))
 
 # ===========================================================
-# OPÇÃO 1: APENAS PIOR CASO (como original)
+# APENAS PIOR CASO (substituido por todos os casos)
 # ===========================================================
 
 fig1, ax1 = plt.subplots(figsize=(14, 8))
@@ -115,10 +108,10 @@ for i, n in enumerate(tamanhos_unicos):
         y_python.append(dado['tempo_medio'].values[0])
         ax1.errorbar(i, dado['tempo_medio'].values[0], 
                     yerr=dado['desvio'].values[0],
-                    fmt='o', color='#e90052', capsize=5, markersize=8,
+                    fmt='o', color="#e900e5", capsize=5, markersize=8,
                     linewidth=2, elinewidth=1.5, zorder=3)
 
-ax1.plot(x_ticks, y_python, '-', color='#e90052', linewidth=2, 
+ax1.plot(x_ticks, y_python, '-', color='#e900e5', linewidth=2, 
         label='Python - Pior Caso Medido', zorder=2)
 
 # C - Pior Caso
@@ -129,22 +122,19 @@ for i, n in enumerate(tamanhos_unicos):
         y_c.append(dado['tempo_medio'].values[0])
         ax1.errorbar(i, dado['tempo_medio'].values[0],
                     yerr=dado['desvio'].values[0],
-                    fmt='^', color='#0077b6', capsize=5, markersize=8,
+                    fmt='^', color="#ffb255", capsize=5, markersize=8,
                     linewidth=2, elinewidth=1.5, zorder=3)
 
-ax1.plot(x_ticks, y_c, '-', color='#0077b6', linewidth=2,
+ax1.plot(x_ticks, y_c, '-', color='#ffb255', linewidth=2,
         label='C - Pior Caso Medido', zorder=2)
 
 # ============================================================
-# CURVA TEÓRICA CORRIGIDA (INDEPENDENTE DOS DADOS!)
+# CURVA TEÓRICA
 # ============================================================
 
 # ============================================================
 # CÁLCULO DA CONSTANTE TEÓRICA (INDEPENDENTE MAS REALISTA)
 # ============================================================
-
-# Método 1: Constante fixa arbitrária (totalmente independente)
-# CONSTANTE_BASE = 5e-5  # 50 microssegundos para n=1000
 
 # Método 2: Média geométrica entre C e Python (mais visual)
 primeiro_c = df[(df['linguagem']=='C') & (df['tipo_caso']=='PIOR CASO') & (df['n']==tamanhos_unicos[0])]
@@ -184,19 +174,18 @@ plt.savefig('analise_teorica_vs_pratica.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 # ===========================================================
-# OPÇÃO 2: TODOS OS CASOS (NOVO!)
+# TODOS OS CASOS
 # ===========================================================
 
 fig2, ax2 = plt.subplots(figsize=(14, 8))
 
-# Cores distintas para cada combinação linguagem + caso
 cores_config = {
-    ('Python', 'MELHOR CASO'): ('#ff6b6b', 'o', '--'),    # Vermelho claro
-    ('Python', 'CASO MEDIO'): ('#e90052', 's', '-'),      # Vermelho médio (original)
-    ('Python', 'PIOR CASO'): ('#a8003d', '^', '-'),       # Vermelho escuro
-    ('C', 'MELHOR CASO'): ('#4ecdc4', 'o', '--'),         # Ciano claro
-    ('C', 'CASO MEDIO'): ('#0077b6', 's', '-'),           # Azul médio (original)
-    ('C', 'PIOR CASO'): ('#023e8a', '^', '-'),            # Azul escuro
+    ('Python', 'MELHOR CASO'): ('#f9c74f', 'o', '--'), 
+    ('Python', 'CASO MEDIO'): ('#f9844a', 's', '-'), 
+    ('Python', 'PIOR CASO'): ('#f94144', '^', '-'), 
+    ('C', 'MELHOR CASO'): ('#90dbf4', 'o', '--'), 
+    ('C', 'CASO MEDIO'): ('#577590', 's', '-'),
+    ('C', 'PIOR CASO'): ('#003049', '^', '-'),
 }
 
 # Plotar Python e C para todos os casos
@@ -224,7 +213,7 @@ ax2.plot(x_ticks, curva_teorica_corrigida, '--', color='green', linewidth=3,
         label='Complexidade Teórica O(n+m)', zorder=1, alpha=0.6)
 
 ax2.set_yscale('log')
-ax2.set_title('Análise Completa: Todos os Casos vs. Teoria',
+ax2.set_title('Análise de Performance KMP: Todos os Casos vs. Teoria',
              fontsize=16, fontweight='bold')
 ax2.set_xlabel('Tamanho da Entrada (N)', fontsize=14)
 ax2.set_ylabel('Tempo de Execução (Segundos - Escala Log)', fontsize=14)
@@ -278,7 +267,7 @@ print("- R² > 0.95: Forte aderência à complexidade linear O(n+m)")
 print("- R² < 0.90: Possível desvio (overhead, cache, GC, etc.)")
 print("="*70)
 
-print("\n✅ Arquivos gerados:")
+print("\nArquivos gerados:")
 print("  1. analise_teorica_vs_pratica.png (curva teórica independente)")
 print("  2. analise_todos_casos_vs_teoria.png (visão completa)")
 print("="*70)

@@ -8,7 +8,6 @@ Este repositório apresenta uma análise completa do desempenho do algoritmo **K
 - Gráficos e tabelas gerados automaticamente  
 - Validação da complexidade assintótica  
 
----
 
 ## 📘 Descrição do Algoritmo
 
@@ -16,7 +15,6 @@ O algoritmo **KMP** resolve o problema de *pattern matching* exato, encontrando 
 
 Seu diferencial é **evitar retrocessos no texto**, graças à **tabela LPS** (*Longest Prefix which is also a Suffix*), que indica quanto o padrão pode avançar após um mismatch — tornando a busca eficiente e previsível.
 
----
 
 ## 🔧 Aplicações do KMP
 
@@ -30,16 +28,14 @@ O KMP é amplamente utilizado em:
 
 É uma excelente escolha quando é necessário **desempenho estável e garantido**.
 
----
-
 ## 📊 Simulação com Dados
 
 Para validar a complexidade O(n + m) do KMP na prática, foram realizadas simulações em C e Python, variando o tamanho do texto e do padrão.
 Cada experimento foi repetido 20 vezes, registrando tempo médio e desvio padrão para garantir precisão estatística.
 
----
 
 ## ⚖️ Comparação de Performance: C x Python
+![Comparação entre C e Python](comparacao_c_python_performance.png)
 
 ### **Conclusões principais**
 
@@ -55,8 +51,8 @@ Cada experimento foi repetido 20 vezes, registrando tempo médio e desvio padrã
 ```bash
  📂 **kmp-teoria**  
  ├── `comparacao_kmp.py` — Executa todos os testes e gera gráficos/tabelas  
- ├── `teste.py` — Testes do KMP em Python  
- ├── `teste.c` — Testes do KMP em C  
+ ├── `teste.py` — Código e testes do KMP em Python  
+ ├── `teste.c` — Código e testes do KMP em C  
  ├── `analise_teorica_vs_pratica.png` — Gráfico gerado automaticamente  
  ├── `comparacao_c_python_performance.png` — Gráfico gerado automaticamente  
  ├── `velocidade_relativa_kmp.png` — Gráfico gerado automaticamente  

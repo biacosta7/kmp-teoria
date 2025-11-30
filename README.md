@@ -1,36 +1,146 @@
 # 🚀 Teoria da Complexidade e Análise de Tempo do Algoritmo KMP
 
-Este repositório apresenta uma análise completa do desempenho do algoritmo Knuth–Morris–Pratt (KMP), incluindo simulações práticas, comparações entre implementações em C e Python, gráficos, tabelas e validação da sua complexidade assintótica.
+Este repositório apresenta uma análise completa do desempenho do algoritmo **Knuth–Morris–Pratt (KMP)**, incluindo:
+
+- Avaliação teórica e prática  
+- Simulações com diferentes casos  
+- Comparação entre implementações em **C** e **Python**  
+- Gráficos e tabelas gerados automaticamente  
+- Validação da complexidade assintótica  
+
 ---
+
 ## 📘 Descrição do Algoritmo
 
-O algoritmo KMP resolve o problema de pattern matching exato, encontrando todas as ocorrências de um padrão P dentro de um texto T.
+O algoritmo **KMP** resolve o problema de *pattern matching* exato, encontrando todas as ocorrências de um padrão `P` dentro de um texto `T`.
 
-Seu diferencial é evitar retrocessos no texto, graças à construção da tabela LPS (Longest Prefix which is also a Suffix), que permite ao algoritmo saber automaticamente quanto deslocar o padrão após um mismatch.
+Seu diferencial é **evitar retrocessos no texto**, graças à **tabela LPS** (*Longest Prefix which is also a Suffix*), que indica quanto o padrão pode avançar após um mismatch — tornando a busca eficiente e previsível.
+
 ---
-🔧 Aplicações do KMP
+
+## 🔧 Aplicações do KMP
 
 O KMP é amplamente utilizado em:
 
-📌 Padrões grandes com repetições
+- 📌 Padrões grandes com repetições  
+- ⚙️ Sistemas embarcados com tempo crítico  
+- 📚 Buscas frequentes em textos extensos  
+- ❌ Cenários com muitos mismatches  
+- ⏱️ Processamento em tempo real  
 
-⚙️ Sistemas embarcados com tempo crítico
-
-📚 Buscas constantes em textos extensos
-
-❌ Cenários com muitos mismatches
-
-⏱️ Processamento em tempo real
-
-O algoritmo é ideal quando é necessário desempenho estável e previsível.
+É uma excelente escolha quando é necessário **desempenho estável e garantido**.
 
 ---
-📊 Simulação com Dados
-<img width="630" height="298" alt="image" src="https://github.com/user-attachments/assets/9b41cc14-e31d-49fc-a1bc-4f3addc235f7" />
----
-⚖️ Comparação de Performance: C x Python
-➡️ C domina em velocidade absoluta, especialmente para entradas grandes.
-➡️ Python é mais lento, mas ainda mantém o comportamento linear esperado.
-➡️ O KMP demonstra alta eficiência e estabilidade em ambas as implementações.
+
+## 📊 Simulação com Dados
+
+Para validar a complexidade O(n + m) do KMP na prática, foram realizadas simulações em C e Python, variando o tamanho do texto e do padrão.
+Cada experimento foi repetido 20 vezes, registrando tempo médio e desvio padrão para garantir precisão estatística.
+
 ---
 
+## ⚖️ Comparação de Performance: C x Python
+
+### **Conclusões principais**
+
+- 🚀 **C é muito mais rápido** que Python, especialmente para entradas grandes.  
+- 🐍 Python apresenta maior overhead, mas mantém **crescimento linear**.  
+- 📈 Em ambas as linguagens, o KMP preserva sua complexidade **O(N)**.  
+- 🔬 Caso Real e Pior Caso são muito próximos → algoritmo **estável e previsível**.
+
+---
+
+## 🧱 Arquitetura do Projeto
+
+> [!NOTE]
+> ## 🧱 Arquitetura do Projeto  
+>
+> 📂 **projeto-kmp**  
+> ├── `comparacao_kmp.py` — Executa todos os testes e gera gráficos/tabelas  
+> ├── `teste.py` — Testes do KMP em Python  
+> ├── `teste.c` — Testes do KMP em C  
+> ├── `analise_teorica_vs_pratica.png` — Gráfico gerado automaticamente  
+> ├── `comparacao_c_python_performance.png` — Gráfico gerado automaticamente  
+> ├── `velocidade_relativa_kmp.png` — Gráfico gerado automaticamente  
+> └── `README.md`
+
+---
+
+## 🚀 Como rodar o projeto
+
+### 1) Instalar dependências Python
+```bash
+pip install pandas matplotlib scipy numpy
+```
+
+---
+
+### 2) Compilar o código em C
+#### 🪟 Windows
+```bash
+gcc teste.c -o teste_c.exe -lm
+```
+
+#### 🐧 Linux / macOS
+```bash
+gcc teste.c -o teste_c -lm
+```
+
+---
+
+### 3) Rodar os testes individualmente
+#### Python:
+```bash
+python teste.py
+```
+
+#### C:
+Windows:
+```bash
+./teste_c.exe
+```
+Linux/macOS:
+```bash
+./teste_c
+```
+
+---
+
+### 4) Rodar a análise completa 
+```bash
+python comparacao_kmp.py
+```
+
+Isso irá:
+
+- compilar automaticamente o `teste.c`
+- rodar os testes em C e Python  
+- gerar tabelas comparativas  
+- calcular diferenças entre casos  
+- validar a complexidade O(n+m)  
+- gerar os gráficos:  
+  - `analise_teorica_vs_pratica.png`  
+  - `comparacao_c_python_performance.png`
+
+---
+
+## ⏳ Análise de Complexidade
+
+O KMP é composto por duas fases:
+### Construção da Tabela LPS — O(m)
+- Processa somente o padrão.
+- Sempre linear, independente dos casos.
+  
+### Busca no texto — O(n)
+- ⭐ Melhor Caso: textos e padrões aleatórios onde o primeiro caractere do padrão nunca aparece no texto, forçando mismatches imediatos.
+- 🔥 Pior Caso: padrões e textos altamente repetitivos (aaaa...ab), projetados para maximizar o uso da tabela LPS — ainda assim mantendo crescimento linear.
+- 📈 Caso Médio: texto e padrão totalmente aleatórios, representando o comportamento típico do algoritmo.
+
+### Complexidade Total
+- O(n + m)
+---
+
+## 👥 Equipe
+- Beatriz Costa
+- Nina França
+- Sofia Gomes

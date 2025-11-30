@@ -33,17 +33,6 @@ O KMP é amplamente utilizado em:
 Para validar a complexidade O(n + m) do KMP na prática, foram realizadas simulações em C e Python, variando o tamanho do texto e do padrão.
 Cada experimento foi repetido 20 vezes, registrando tempo médio e desvio padrão para garantir precisão estatística.
 
-
-## ⚖️ Comparação de Performance: C x Python
-![Comparação entre C e Python](comparacao_c_python_performance.png)
-
-### **Conclusões principais**
-
-- 🚀 **C é muito mais rápido** que Python, especialmente para entradas grandes.  
-- 🐍 Python apresenta maior overhead, mas mantém **crescimento linear**.  
-- 📈 Em ambas as linguagens, o KMP preserva sua complexidade **O(N)**.  
-- 🔬 Caso Real e Pior Caso são muito próximos → algoritmo **estável e previsível**.
-
 ---
 
 ## 🧱 Arquitetura do Projeto

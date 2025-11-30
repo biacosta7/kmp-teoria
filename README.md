@@ -52,19 +52,16 @@ Cada experimento foi repetido 20 vezes, registrando tempo médio e desvio padrã
 
 ## 🧱 Arquitetura do Projeto
 
-> [!NOTE]
-> ## 🧱 Arquitetura do Projeto  
->
-> 📂 **projeto-kmp**  
-> ├── `comparacao_kmp.py` — Executa todos os testes e gera gráficos/tabelas  
-> ├── `teste.py` — Testes do KMP em Python  
-> ├── `teste.c` — Testes do KMP em C  
-> ├── `analise_teorica_vs_pratica.png` — Gráfico gerado automaticamente  
-> ├── `comparacao_c_python_performance.png` — Gráfico gerado automaticamente  
-> ├── `velocidade_relativa_kmp.png` — Gráfico gerado automaticamente  
-> └── `README.md`
-
----
+```bash
+ 📂 **kmp-teoria**  
+ ├── `comparacao_kmp.py` — Executa todos os testes e gera gráficos/tabelas  
+ ├── `teste.py` — Testes do KMP em Python  
+ ├── `teste.c` — Testes do KMP em C  
+ ├── `analise_teorica_vs_pratica.png` — Gráfico gerado automaticamente  
+ ├── `comparacao_c_python_performance.png` — Gráfico gerado automaticamente  
+ ├── `velocidade_relativa_kmp.png` — Gráfico gerado automaticamente  
+ └── `README.md`
+```
 
 ## 🚀 Como rodar o projeto
 
@@ -72,8 +69,6 @@ Cada experimento foi repetido 20 vezes, registrando tempo médio e desvio padrã
 ```bash
 pip install pandas matplotlib scipy numpy
 ```
-
----
 
 ### 2) Compilar o código em C
 #### 🪟 Windows
@@ -85,8 +80,6 @@ gcc teste.c -o teste_c.exe -lm
 ```bash
 gcc teste.c -o teste_c -lm
 ```
-
----
 
 ### 3) Rodar os testes individualmente
 #### Python:
@@ -104,8 +97,6 @@ Linux/macOS:
 ./teste_c
 ```
 
----
-
 ### 4) Rodar a análise completa 
 ```bash
 python comparacao_kmp.py
@@ -122,8 +113,6 @@ Isso irá:
   - `analise_teorica_vs_pratica.png`  
   - `comparacao_c_python_performance.png`
 
----
-
 ## ⏳ Análise de Complexidade
 
 O KMP é composto por duas fases:
@@ -138,7 +127,6 @@ O KMP é composto por duas fases:
 
 ### Complexidade Total
 - O(n + m)
----
 
 ## 👥 Equipe
 - Beatriz Costa

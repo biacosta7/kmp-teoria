@@ -77,6 +77,70 @@ df = pd.DataFrame(dados_python + dados_c)
 df['n_mais_m'] = df['n'] + df['m']
 
 # ============================================================
+# TABELA DE RESULTADOS
+# ============================================================
+
+print("\n" + "="*70)
+print("TABELA DE RESULTADOS - TODOS OS CASOS")
+print("="*70)
+
+# Criar tabela pivot
+tabela = df.pivot_table(
+    index=['n', 'tipo_caso'],
+    columns='linguagem',
+    values=['tempo_medio', 'desvio'],
+    aggfunc='first'
+)
+
+print(tabela.to_string())
+
+# ============================================================
+# ANÁLISE DE DIFERENÇA ENTRE CASOS
+# ============================================================
+
+print("\n" + "="*70)
+print("ANÁLISE: DIFERENÇA ENTRE MELHOR E PIOR CASO")
+print("="*70)
+
+for ling in ['C', 'Python']:
+    print(f"\n{ling}:")
+    print(f"{'n (chars)':<12} {'Melhor (s)':<12} {'Pior (s)':<12} {'Diff (%)':<12}")
+    print("-"*50)
+    
+    for n in sorted(df['n'].unique()):
+        melhor = df[(df['linguagem']==ling) & (df['tipo_caso']=='MELHOR CASO') & (df['n']==n)]
+        pior = df[(df['linguagem']==ling) & (df['tipo_caso']=='PIOR CASO') & (df['n']==n)]
+        
+        if not melhor.empty and not pior.empty:
+            t_melhor = melhor['tempo_medio'].values[0]
+            t_pior = pior['tempo_medio'].values[0]
+            diff_pct = ((t_pior - t_melhor) / t_melhor) * 100
+            print(f"{n:<12,} {t_melhor:<12.6f} {t_pior:<12.6f} {diff_pct:<+12.2f}%")
+
+print("\n-> Interpretação: Diferença < 25% confirma que KMP mantém O(n+m) no pior caso!")
+
+# ============================================================
+# SPEEDUP ENTRE LINGUAGENS
+# ============================================================
+
+print("\n" + "="*70)
+print("SPEEDUP (Python / C) POR TIPO DE CASO")
+print("="*70)
+
+for caso in ['MELHOR CASO', 'PIOR CASO', 'CASO MEDIO']:
+    print(f"\n{caso}:")
+    df_caso = df[df['tipo_caso'] == caso]
+    
+    for n in sorted(df_caso['n'].unique()):
+        dados_n = df_caso[df_caso['n'] == n]
+        if len(dados_n) == 2:
+            t_c = dados_n[dados_n['linguagem']=='C']['tempo_medio'].values[0]
+            t_py = dados_n[dados_n['linguagem']=='Python']['tempo_medio'].values[0]
+            speedup = t_py / t_c
+            print(f"  n={n:>10,}: {speedup:>6.2f}x")
+
+
+# ============================================================
 # GRÁFICO 1: ANÁLISE TEÓRICA vs PRÁTICA
 # ============================================================
 

@@ -55,7 +55,6 @@ Cada experimento foi repetido 20 vezes, registrando tempo médio e desvio padrã
  ├── `teste.c` — Código e testes do KMP em C  
  ├── `analise_teorica_vs_pratica.png` — Gráfico gerado automaticamente  
  ├── `comparacao_c_python_performance.png` — Gráfico gerado automaticamente  
- ├── `velocidade_relativa_kmp.png` — Gráfico gerado automaticamente  
  └── `README.md`
 ```
 

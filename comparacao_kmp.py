@@ -176,7 +176,7 @@ for i, n in enumerate(tamanhos_unicos):
     if not dado.empty:
         ax.errorbar(i, dado['tempo_medio'].values[0], 
                    yerr=dado['desvio'].values[0],
-                   fmt='o', color='#e90052', capsize=5, markersize=8,
+                   fmt='o', color='#FF7F00', capsize=5, markersize=8,
                    linewidth=2, elinewidth=1.5, zorder=3)
 
 # Linha conectando pontos Python
@@ -185,7 +185,7 @@ for n in tamanhos_unicos:
     dado = df[(df['linguagem']=='Python') & (df['tipo_caso']=='PIOR CASO') & (df['n']==n)]
     if not dado.empty:
         y_python.append(dado['tempo_medio'].values[0])
-ax.plot(x_ticks, y_python, '-', color='#e90052', linewidth=2, 
+ax.plot(x_ticks, y_python, '-', color='#FF7F00', linewidth=2, 
         label='Python - Pior Caso Medido', zorder=2)
 
 # Calcular curva teórica O(N) - ajustada aos dados
@@ -208,7 +208,7 @@ for i, n in enumerate(tamanhos_unicos):
     if not dado.empty:
         ax.errorbar(i, dado['tempo_medio'].values[0],
                    yerr=dado['desvio'].values[0],
-                   fmt='^', color='#0077b6', capsize=5, markersize=8,
+                   fmt='^', color='#1F77B4', capsize=5, markersize=8,
                    linewidth=2, elinewidth=1.5, zorder=3)
 
 # Linha conectando pontos C
@@ -217,15 +217,15 @@ for n in tamanhos_unicos:
     dado = df[(df['linguagem']=='C') & (df['tipo_caso']=='PIOR CASO') & (df['n']==n)]
     if not dado.empty:
         y_c.append(dado['tempo_medio'].values[0])
-ax.plot(x_ticks, y_c, '-', color='#0077b6', linewidth=2,
+ax.plot(x_ticks, y_c, '-', color='#1F77B4', linewidth=2,
         label='C - Pior Caso Medido', zorder=2)
 
 # Configuração do gráfico
 ax.set_yscale('log')
-ax.set_title('Análise Teórica vs. Prática (Pior Caso) - Escala Logarítmica',
+ax.set_title('Análise prática e teórica do pior caso, escala logarítma',
              fontsize=16, fontweight='bold')
-ax.set_xlabel('Tamanho da Entrada (N)', fontsize=14)
-ax.set_ylabel('Tempo de Execução (Segundos - Escala Log)', fontsize=14)
+ax.set_xlabel('Tamanho da entrada', fontsize=14)
+ax.set_ylabel('Tempo de execução em segundos, escala logarítmica', fontsize=14)
 ax.set_xticks(x_ticks)
 ax.set_xticklabels(x_labels, rotation=45, ha='right')
 ax.legend(fontsize=12, loc='upper left')
@@ -252,7 +252,7 @@ mapa_casos = {
     'PIOR CASO': 'Pior Caso'
 }
 
-for ling, cor, marker in [('C', '#0077b6', '^'), ('Python', '#e90052', 'o')]:
+for ling, cor, marker in [('C', '#1F77B4', '^'), ('Python', '#FF7F00', 'o')]:
     for tipo_orig, tipo_display in mapa_casos.items():
         # Preparar dados
         y_vals = []
@@ -279,10 +279,10 @@ for ling, cor, marker in [('C', '#0077b6', '^'), ('Python', '#e90052', 'o')]:
 
 # Configuração do gráfico
 ax.set_yscale('log')
-ax.set_title('KMP: Comparação de Performance (C vs Python) - Escala Logarítmica',
+ax.set_title('Comparação de Performance de C e Python, escala logarítmica',
              fontsize=16, fontweight='bold')
-ax.set_xlabel('Tamanho da Entrada (N)', fontsize=14)
-ax.set_ylabel('Tempo de Execução Médio (Segundos - Escala Log)', fontsize=14)
+ax.set_xlabel('Tamanho da entrada', fontsize=14)
+ax.set_ylabel('Tempo de execução médio em segundos, escala logarítmica', fontsize=14)
 ax.set_xticks(x_ticks)
 ax.set_xticklabels(x_labels, rotation=45, ha='right')
 ax.legend(fontsize=12, loc='upper left')

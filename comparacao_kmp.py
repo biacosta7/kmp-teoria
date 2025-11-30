@@ -171,20 +171,6 @@ tamanhos_unicos = sorted(df['n'].unique())
 x_labels = [bytes_to_label(n) for n in tamanhos_unicos]
 x_ticks = np.arange(len(x_labels))
 
-# Calcular curva teórica O(N) - ajustada aos dados
-dados_teorico = df[(df['linguagem']=='Python') & (df['tipo_caso']=='PIOR CASO')]
-x_teorico = dados_teorico['n'].values
-y_teorico = dados_teorico['tempo_medio'].values
-
-# Ajuste linear para curva teórica (não arbitrária!)
-slope_teorico, intercept_teorico, _, _, _ = linregress(x_teorico, y_teorico)
-curva_teorica = slope_teorico * np.array(tamanhos_unicos) + intercept_teorico
-
-# Plotar curva teórica
-ax.plot(x_ticks, curva_teorica, '--', color='green', linewidth=2.5,
-        label='Complexidade Teórica $O(N)$', zorder=1)
-
-# Plotar Python - Pior Caso
 for i, n in enumerate(tamanhos_unicos):
     dado = df[(df['linguagem']=='Python') & (df['tipo_caso']=='PIOR CASO') & (df['n']==n)]
     if not dado.empty:
@@ -201,6 +187,20 @@ for n in tamanhos_unicos:
         y_python.append(dado['tempo_medio'].values[0])
 ax.plot(x_ticks, y_python, '-', color='#e90052', linewidth=2, 
         label='Python - Pior Caso Medido', zorder=2)
+
+# Calcular curva teórica O(N) - ajustada aos dados
+dados_teorico = df[(df['linguagem']=='Python') & (df['tipo_caso']=='PIOR CASO')]
+x_teorico = dados_teorico['n'].values
+y_teorico = dados_teorico['tempo_medio'].values
+
+# Ajuste linear para curva teórica (não arbitrária!)
+slope_teorico, intercept_teorico, _, _, _ = linregress(x_teorico, y_teorico)
+curva_teorica = tamanhos_unicos / tamanhos_unicos[0] * y_python[0]
+
+# Plotar curva teórica
+ax.plot(x_ticks, curva_teorica, '--', color='green', linewidth=2.5,
+        label='Complexidade Teórica $O(N)$', zorder=1)
+
 
 # Plotar C - Pior Caso
 for i, n in enumerate(tamanhos_unicos):

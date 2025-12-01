@@ -76,18 +76,17 @@ def medir_execucao(func, *args):
 def executar_experimento(tam_texto, tam_padrao, repeticoes=20, tipo_caso='CASO MEDIO'):
     """
     Executa experimento de performance do KMP
-    
     Args:
         tam_texto: tamanho do texto (n)
         tam_padrao: tamanho do padrão (m)
         repeticoes: número de execuções (15-30 recomendado)
         tipo_caso: 'MELHOR CASO', 'PIOR CASO' ou 'CASO MEDIO'
-    
+ 
     Returns:
         dict com estatísticas do experimento
     """
     
-    # GERAR STRINGS CONFORME O TIPO DE CASO
+    # GERA STRINGS CONFORME O TIPO DE CASO
     if tipo_caso == 'PIOR CASO':
         # Texto cheio de 'A's com um 'B' no final
         # Força máximo de comparações em algoritmos naive (mas KMP resiste)
@@ -133,7 +132,6 @@ def executar_experimento(tam_texto, tam_padrao, repeticoes=20, tipo_caso='CASO M
 
 
 if __name__ == "__main__":
-    # Tamanhos de teste (mesmos do teste.c para comparação justa)
     tamanhos = [
         (1_000, 10),        # pequeno
         (10_000, 20),       # médio-pequeno
@@ -152,7 +150,7 @@ if __name__ == "__main__":
         for tipo in ['MELHOR CASO', 'PIOR CASO', 'CASO MEDIO']:
             resultado = executar_experimento(T, P, repeticoes=20, tipo_caso=tipo)
 
-            # FORMATO QUE comparacao_kmp.py ESPERA
+            #formato que comparacao_kmp.py espera
             print("\n" + "="*50)
             print(f"TIPO: {tipo}")
             print(f"TEXTO = {T}")

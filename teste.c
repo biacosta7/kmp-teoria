@@ -4,9 +4,6 @@
 #include <time.h>
 #include <math.h>
 
-/**
- * Obtém timestamp de alta precisão
- */
 double now() {
     struct timespec ts;
     clock_gettime(CLOCK_MONOTONIC, &ts);
@@ -116,14 +113,10 @@ void executar_experimento(int tam_texto, int tam_padrao, int repeticoes, const c
         exit(1);
     }
 
-    // ============================================================
-    // GERAR STRINGS CONFORME O TIPO DE CASO
-    // ============================================================
-    
     gerar_string_caso(texto, tam_texto, tipo_caso);
     gerar_string_caso(padrao, tam_padrao, tipo_caso);
     
-    // Para MELHOR CASO, garantir que padrão não existe no texto
+    // Para MELHOR CASO garantir que padrão não existe no texto
     if (strcmp(tipo_caso, "MELHOR CASO") == 0) {
         // Trocar primeira letra do padrão para algo diferente do texto
         padrao[0] = (texto[0] == 'z') ? 'a' : 'z';
@@ -184,7 +177,7 @@ int main() {
     printf("TESTES DE PERFORMANCE - ALGORITMO KMP (C)\n");
     printf("==================================================\n");
 
-    // Mesmos tamanhos do teste.py para comparação justa
+    // mesmos tamanhos do teste.py para comparação justa
     int testes[][2] = {
         {1000, 10},         // pequeno
         {10000, 20},        // médio-pequeno
@@ -197,14 +190,11 @@ int main() {
     int num_testes = sizeof(testes) / sizeof(testes[0]);
     int repeticoes = 20;
     
-    // Array com os 3 tipos de casos
     const char *tipos[] = {"MELHOR CASO", "PIOR CASO", "CASO MEDIO"};
     int num_tipos = 3;
 
-    // ============================================================
     // EXECUTAR OS 3 CASOS PARA CADA TAMANHO
-    // ============================================================
-    
+
     for (int i = 0; i < num_testes; i++) {
         for (int t = 0; t < num_tipos; t++) {
             executar_experimento(testes[i][0], testes[i][1], repeticoes, tipos[t]);

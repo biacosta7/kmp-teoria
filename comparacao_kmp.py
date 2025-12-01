@@ -8,7 +8,6 @@ import sys
 import io
 import platform
 
-# Configurar encoding UTF-8 para Windows
 if sys.platform == 'win32':
     sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
@@ -24,7 +23,7 @@ print("Curva teórica independente + visualização aprimorada")
 print("="*70)
 
 # ============================================================
-# EXECUTAR TESTES (mesmo código)
+# EXECUTAR TESTES
 # ============================================================
 
 print("\n[1/4] Executando testes em Python...")
@@ -44,7 +43,7 @@ saida_c = subprocess.check_output(
 )
 
 # ============================================================
-# EXTRAÇÃO DE DADOS
+# EXTRAIR DADOS
 # ============================================================
 
 def extrair_dados(logs, linguagem):
@@ -192,37 +191,33 @@ for i, n in enumerate(tamanhos_unicos):
 ax1.plot(x_ticks, y_c, '-', color='#ffb255', linewidth=2,
         label='C - Pior Caso Medido', zorder=2)
 
-# ============================================================
-# CURVA TEÓRICA
-# ============================================================
 
 # ============================================================
-# CÁLCULO DA CONSTANTE TEÓRICA (INDEPENDENTE MAS REALISTA)
+# CÁLCULO DA CONSTANTE TEÓRICA
 # ============================================================
 
-# Método 2: Média geométrica entre C e Python (mais visual)
 primeiro_c = df[(df['linguagem']=='C') & (df['tipo_caso']=='PIOR CASO') & (df['n']==tamanhos_unicos[0])]
 primeiro_py = df[(df['linguagem']=='Python') & (df['tipo_caso']=='PIOR CASO') & (df['n']==tamanhos_unicos[0])]
 
 if not primeiro_c.empty and not primeiro_py.empty:
     t_c = primeiro_c['tempo_medio'].values[0]
     t_py = primeiro_py['tempo_medio'].values[0]
-    CONSTANTE_BASE = np.sqrt(t_c * t_py)  # Média geométrica
+    CONSTANTE_BASE = np.sqrt(t_c * t_py)  #media geometrica
     print(f"\n[INFO] Constante teórica calculada: {CONSTANTE_BASE:.2e} segundos")
     print(f"       (Média geométrica entre C={t_c:.2e} e Python={t_py:.2e})")
 else:
-    CONSTANTE_BASE = 5e-5  # Fallback
+    CONSTANTE_BASE = 5e-5  #fallback
     print(f"\n[INFO] Usando constante padrão: {CONSTANTE_BASE:.2e} segundos")
 
-# Calcular curva teórica: T(n) = k * n (onde k é nossa constante)
+#calcular curva teórica: T(n) = k * n (onde k é nossa constante)
 n_teorico = np.array(tamanhos_unicos)
 curva_teorica_corrigida = CONSTANTE_BASE * (n_teorico / n_teorico[0])
 
-# Plotar curva teórica
+#plotar curva teórica
 ax1.plot(x_ticks, curva_teorica_corrigida, '--', color='green', linewidth=2.5,
         label='Complexidade Teórica O(n+m) [referência]', zorder=1, alpha=0.7)
 
-# Configuração do gráfico
+#configuração do gráfico
 ax1.set_yscale('log')
 ax1.set_title('Análise Teórica vs. Prática (Pior Caso)',
              fontsize=16, fontweight='bold')
@@ -252,7 +247,7 @@ cores_config = {
     ('C', 'PIOR CASO'): ('#003049', '^', '-'),
 }
 
-# Plotar Python e C para todos os casos
+#plotar Python e C para todos os casos
 for ling in ['Python', 'C']:
     for caso in ['MELHOR CASO', 'CASO MEDIO', 'PIOR CASO']:
         cor, marker, linestyle = cores_config[(ling, caso)]
@@ -272,7 +267,7 @@ for ling in ['Python', 'C']:
                     color=cor, linewidth=2.5,
                     label=f'{ling} - {caso}', alpha=0.9, zorder=2)
 
-# Curva teórica (mesma do gráfico anterior)
+#curva teórica
 ax2.plot(x_ticks, curva_teorica_corrigida, '--', color='green', linewidth=3,
         label='Complexidade Teórica O(n+m)', zorder=1, alpha=0.6)
 
@@ -312,16 +307,16 @@ for ling in ['Python', 'C']:
             
             slope, intercept, r_value, p_value, std_err = linregress(x, y)
             
-            # Determinar qualidade do ajuste
+            #determina qualidade do ajuste
             r2 = r_value**2
             if r2 > 0.98:
-                qualidade = "✅ Excelente"
+                qualidade = "Excelente"
             elif r2 > 0.95:
-                qualidade = "✅ Muito Boa"
+                qualidade = "Muito Boa"
             elif r2 > 0.90:
-                qualidade = "⚠️  Boa"
+                qualidade = "Boa"
             else:
-                qualidade = "❌ Ruim"
+                qualidade = "Ruim"
             
             print(f"{caso:<15} {r2:<15.6f} {slope:<15.2e} {qualidade}")
 

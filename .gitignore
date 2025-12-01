@@ -1,0 +1,14 @@
+package-lock.json
+node_modules/.package-lock.json
+node_modules/matplotlib/matplotlib.ts
+node_modules/matplotlib/package.json
+node_modules/pandas/.npmignore
+node_modules/pandas/example.js
+node_modules/pandas/index.js
+node_modules/pandas/package.json
+node_modules/pandas/README.md
+node_modules/pandas/lib/flickr.js
+node_modules/pandas/lib/pandas.js
+node_modules/pandas/test/flickr_spec.js
+node_modules/pandas/test/pandas_spec.js
+node_modules/pandas/test/support.js
